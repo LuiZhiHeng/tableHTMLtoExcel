@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>export Excel</title>
+</head>
+<body>
+    <table border="1" cellspacing="0" id="dataExport">
+        <tr>
+            <th>Product</th>
+            <th>Qty</th>
+            <th>Price</th>
+        </tr>
+        <tr>
+            <td>Apple</td>
+            <td>20/50</td>
+            <td>30</td>
+        </tr>
+        <tr>
+            <td>Banana</td>
+            <td>20/40</td>
+            <td>4.20</td>
+        </tr>
+            <td>Carrot</td>
+            <td>0/10</td>
+            <td>16.00</td>
+        <tr>
+            <td style="text-align: right;">Total: </td>
+            <td colspan="2">87</td>
+        </tr>
+    </table>
+    <button onclick="exportExcel('dataExport', 'reportABC')">Export</button>
+    <!--<button onclick="exportExcel('dataExport')">Export</button>-->
+    <script>
+        function exportExcel(tableId, fileName = ''){
+            let downloadLink = document.createElement("a");
+            let dataType = 'application/vnd.ms-excel';
+            let data = document.getElementById(tableId).outerHTML.replace(/ /g, '%20'); // replace space
+            fileName = fileName ? fileName + '.xls' : 'report.xls'; // set file name
+            document.body.appendChild(downloadLink); // generate download link
+            if(navigator.msSaveOrOpenBlob){
+                navigator.msSaveOrOpenBlob(
+                    new Blob(['\ufeff', data], {
+                        type: dataType
+                    }
+                ), fileName);
+            }else{
+                downloadLink.href = 'data:' + dataType + ', ' + data; // set file link
+                downloadLink.download = fileName; // set file name
+                downloadLink.click(); // auto click
+            }
+        }
+    </script>
+</body>
+</html>
